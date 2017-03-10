@@ -168,6 +168,10 @@ class App extends Component {
         });
     }
 
+    getFilterClass(value) {
+        return this.state.filters === value ? 'active' : '';
+    }
+
     addElement() {
 
         this.state.elements.push({
@@ -192,10 +196,10 @@ class App extends Component {
                 <div className="App-header">
                     <img src={logo} className="App-logo" alt="logo" />
 
-                    <div class="filters">
-                        <button onClick={this.selectFilter.bind(this, "none")} >Tous</button>
-                        <button onClick={this.selectFilter.bind(this, "goron")} >Goron</button>
-                        <button onClick={this.selectFilter.bind(this, "zora")} >Zora</button>
+                    <div className="filters">
+                        <button className={this.getFilterClass("none")} onClick={this.selectFilter.bind(this, "none")} >Tous</button>
+                        <button className={this.getFilterClass("goron")} onClick={this.selectFilter.bind(this, "goron")} >Goron</button>
+                        <button className={this.getFilterClass("zora")} onClick={this.selectFilter.bind(this, "zora")} >Zora</button>
                     </div>
 
                     <br /><br />
@@ -214,17 +218,15 @@ class App extends Component {
 
                     {this.state.elements.map((element, index) => {
 
-                        let isIsFilter = false;
+                        let isInFilter = false;
 
                         if(this.state.filters === "none") {
-                            isIsFilter = true;
+                            isInFilter = true;
                         } else if(element.tribu.toLowerCase() === this.state.filters.toLowerCase()) {
-                            isIsFilter = true;
+                            isInFilter = true;
                         }
 
-                        console.log(isIsFilter);
-
-                        if(!isIsFilter) {
+                        if(!isInFilter) {
                             return null;
                         }
 
