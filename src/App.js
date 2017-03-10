@@ -2,9 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import classnames from 'classnames';
-
-class Monster extends React.Component {
+class Protagonist extends React.Component {
 
     constructor() {
 
@@ -31,38 +29,209 @@ class Monster extends React.Component {
 
     render() {
         return (
-            <div className={this.state.clicked} onClick={this.strokeElement.bind(this)} >Hello, My {this.koko} Name Is { this.props.name }, I am a { this.props.type } { this.props.gender } !<br /><br /></div>
+            <div className={this.state.clicked} onClick={this.strokeElement.bind(this)} >
+                Hello, My name is { this.props.name }, I am a { this.props.tribu } !<br /><br />
+            </div>
         )
     }
 }
 
-Monster.propTypes = {
-    gender: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+Protagonist.propTypes = {
+    tribu: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired
 };
 
+// class AddProtagonist extends React.Component {
+
+//     constructor() {
+//         super();
+//     }
+
+//     changeNewElementName(event) {
+
+//         const newElement = {
+//             name: event.target.value,
+//             tribu: this.state.newElement.tribu
+//         };
+
+//         this.setState({
+//             newElement: newElement
+//         });
+//     }
+
+//     changeNewElementTribu(event) {
+
+//         const newElement = {
+//             name: this.state.newElement.name,
+//             tribu: event.target.value
+//         };
+
+//         this.setState({
+//             newElement: newElement
+//         });
+//     }
+
+//     addElement() {
+
+//         this.state.elements.push({
+//             name: this.state.newElement.name,
+//             tribu: this.state.newElement.tribu
+//         });
+
+//         this.setState({
+//             elements: this.state.elements,
+//             newElement: {
+//                 name: "",
+//                 tribu: ""
+//             }
+//         });
+//     }
+
+//     render() {
+//         return (
+
+//             <div>
+//                 <div>
+//                     <label>Name</label>
+//                     <input type="text" value={this.state.newElement.name} onChange={this.changeNewElementName.bind(this)} />
+//                 </div> 
+
+//                 <div>
+//                     <label>Tribu</label>
+//                     <input type="text" value={this.state.newElement.tribu} onChange={this.changeNewElementTribu.bind(this)} />
+//                 </div>
+
+//                 <button onClick={this.addElement.bind(this)}>Ajouter</button>
+//             </div>
+//         )
+//     }
+// }
+
 class App extends Component {
+
+    constructor() {
+
+        super();
+
+        this.state = {
+
+            elements: [
+                {
+                    name: 'Daruma',
+                    tribu: 'Goron'
+                }, {
+                    name:'Jabu-Jabu',
+                    tribu: 'Zora'
+                }, {
+                    name: 'Mido',
+                    tribu: "Kokiri"
+                }
+            ],
+
+            newElement: {
+                name: "",
+                tribu: ""
+            },
+
+            filters: "none"
+        };
+    }
+
+    changeNewElementName(event) {
+
+        const newElement = {
+            name: event.target.value,
+            tribu: this.state.newElement.tribu
+        };
+
+        this.setState({
+            newElement: newElement
+        });
+    }
+
+    changeNewElementTribu(event) {
+
+        const newElement = {
+            name: this.state.newElement.name,
+            tribu: event.target.value
+        };
+
+        this.setState({
+            newElement: newElement
+        });
+    }
+
+    selectFilter(value) {
+
+        this.setState({
+            filters: value
+        });
+    }
+
+    addElement() {
+
+        this.state.elements.push({
+            name: this.state.newElement.name,
+            tribu: this.state.newElement.tribu
+        });
+
+        this.setState({
+            elements: this.state.elements,
+            newElement: {
+                name: "",
+                tribu: ""
+            }
+        });
+    }
+
     render() {
 
-        // const { array } = ['Lanturn', 'Cizayox', 'Pharamp'];
-
         return (
+
             <div className="App">
                 <div className="App-header">
                     <img src={logo} className="App-logo" alt="logo" />
 
-                    <Monster gender="Pokemon" type="Elektrik" name="Lanturn" />
-                    <Monster gender="Pokemon" type="Iron" name="Cizayox" />
-                    <Monster gender="Pokemon" type="Elektrik" name="Pharamp" />
+                    <div class="filters">
+                        <button onClick={this.selectFilter.bind(this, "none")} >Tous</button>
+                        <button onClick={this.selectFilter.bind(this, "goron")} >Goron</button>
+                        <button onClick={this.selectFilter.bind(this, "zora")} >Zora</button>
+                    </div>
+
+                    <br /><br />
+
+                    <div>
+                        <label>Name</label>
+                        <input type="text" value={this.state.newElement.name} onChange={this.changeNewElementName.bind(this)} />
+                    </div> 
+
+                    <div>
+                        <label>Tribu</label>
+                        <input type="text" value={this.state.newElement.tribu} onChange={this.changeNewElementTribu.bind(this)} />
+                    </div>
+
+                    <button onClick={this.addElement.bind(this)}>Ajouter</button>
+
+                    {this.state.elements.map((element, index) => {
+
+                        let isIsFilter = false;
+
+                        if(this.state.filters === "none") {
+                            isIsFilter = true;
+                        } else if(element.tribu.toLowerCase() === this.state.filters.toLowerCase()) {
+                            isIsFilter = true;
+                        }
+
+                        console.log(isIsFilter);
+
+                        if(!isIsFilter) {
+                            return null;
+                        }
+
+                        return <Protagonist name={element.name} tribu={element.tribu} />;
+                    })}
                 </div>
             </div>
-
-            // array.map((element) => {
-            //     return (
-            //         <Monster gender="Pokemon" name="{element}" />
-            //     )
-            // })
         );
     }
 }
